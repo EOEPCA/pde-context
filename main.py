@@ -5,23 +5,29 @@ import os
 import requests
 from requests.auth import HTTPBasicAuth
 from pathlib import Path
+import urllib3
 
 @click.command()
-# @click.option('--count', default=1, help='number of greetings')
-@click.option('--username', help='username')
-@click.option('--password', help='user password')
-@click.option('--base_domain', help='Ades host')
+@click.option('--username',required=True, help='username')
+@click.option('--password',required=True, help='user password')
+@click.option('--base_domain',required=True, help='Ades host')
 @click.option('--jenkins_endpoint', default='http://127.0.0.1:8081/jenkins/', help='Jenkins endpoint')
 @click.option('--workspace_prefix', default='rm-user', help='Workspace prefix')
 def cli(username, password, base_domain, jenkins_endpoint,workspace_prefix):
-    printTitle("Retrieving access credentials for user {username}")
+    # user home path
+    home = str(Path.home())
+
+    printTitle(f"Retrieving access credentials for user {username}")
 
     # -------------------------------------------------------------------------------
     # Initialise client
     # -------------------------------------------------------------------------------
-    demo = client.DemoClient(f"https://test.{base_domain}")
-    demo.register_client()
-    demo.save_state()
+    try:
+        demo = client.DemoClient(f"https://test.{base_domain}")
+        demo.register_client()
+        demo.save_state()
+    except urllib3.exceptions.NewConnectionError as err:
+        raise SystemExit(err)
 
     # -------------------------------------------------------------------------------
     # Authenticate as user 'eric' and get ID Token
@@ -54,7 +60,7 @@ def cli(username, password, base_domain, jenkins_endpoint,workspace_prefix):
     # S3CMD CONFIG FILE
     # -------------------------------------------------------------------------------
     printTitle("s3cmd creating/updating config file:")
-    s3cmd_config_file = "s3cfg_test"
+    s3cmd_config_file = os.path.join(home,".s3cfg")
     s3cfgString = """
 host_base = {endpoint}
 host_bucket = {endpoint}
@@ -84,7 +90,6 @@ secret_key = {s3_secret}
     # AWS CONFIG FILE
     # -------------------------------------------------------------------------------
     printTitle("AWS CLI: creating/updating config file:")
-    home = str(Path.home())
     aws_config_file = os.path.join(home, '.aws/config')
     aws_credential_file = os.path.join(home, '.aws/credentials')
 
@@ -96,7 +101,7 @@ region = {s3_region}
 s3 =
   endpoint_url = {endpoint}
   addressing_style = path
-""".format(username=username, endpoint=endpoint, s3_access=s3_access, s3_secret=s3_secret, s3_region=s3_region)
+""".format(workspace_prefix= workspace_prefix, username=username, endpoint=endpoint, s3_access=s3_access, s3_secret=s3_secret, s3_region=s3_region)
 
     ## Credential file. This file will be used by Jenkins to grant access to the Workspace
     aws_credentials_file_string = """[{workspace_prefix}-{username}]
@@ -106,7 +111,7 @@ region = {s3_region}
 s3 =
   endpoint_url = {endpoint}
   addressing_style = path
-""".format(username=username, endpoint=endpoint, s3_access=s3_access, s3_secret=s3_secret, s3_region=s3_region)
+""".format(workspace_prefix= workspace_prefix, username=username, endpoint=endpoint, s3_access=s3_access, s3_secret=s3_secret, s3_region=s3_region)
 
     click.echo(aws_config_file_string)
     
