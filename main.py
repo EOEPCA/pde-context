@@ -151,9 +151,6 @@ s3 =
     # -------------------------------------------------------------------------------
     printTitle("JENKINS: creating secrets for workspace access")
 
-    click.echo(
-        f"{USER_NAME}_s3_workspace_credentials added to Jenkins Credentials")
-
     createJenkinsSecretTextCredentials(jenkinsApiEndpoint=jenkins_endpoint,
                                        textId="S3_Region",
                                        secret=s3_region)
