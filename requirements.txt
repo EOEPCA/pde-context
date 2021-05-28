@@ -71,4 +71,3 @@ WellKnownHandler==0.2.0
 widgetsnbextension==3.5.1
 wrapt==1.12.1
 click==7.1.2
-python-jenkins==1.7.0
