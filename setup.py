@@ -13,6 +13,6 @@ setup(
     install_requires=required,
     entry_points='''
         [console_scripts]
-        {packagename}=main:cli
+        {packagename}=pdecontext.main:cli
     '''.format(packagename=packagename),
 )

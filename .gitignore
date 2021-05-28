@@ -157,3 +157,4 @@ Thumbs.db
 state.json
 .theia
 test*.py
+.idea
