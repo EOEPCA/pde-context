@@ -12,26 +12,21 @@ build:
 
 requirements:
   host:
+    - python
     - click
     - requests
     - pycrypto
     - robotframework
     - pip
-    - pip:
-      - eoepca_scim
-      - pyjwkest
-      - WellKnownHandler
 
   run:
+    - python
     - click
     - requests
     - pycrypto
     - robotframework
     - pip
-    - pip:
-      - eoepca_scim
-      - pyjwkest
-      - WellKnownHandler
+    
 
 about:
   home: https://eoepca.github.io/
