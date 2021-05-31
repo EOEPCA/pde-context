@@ -7,6 +7,7 @@ from requests.auth import HTTPBasicAuth
 from pathlib import Path
 import urllib3
 from .aws import set_aws_cli
+from .workspacerc import set_workspacerc
 
 # import configparser
 
@@ -131,6 +132,8 @@ secret_key = {s3_secret}
     )
 
     click.echo(f"S3_ProjectId added to Jenkins Secrets")
+
+    set_workspacerc(bucket_name, s3_access, s3_secret, s3_region, endpoint)
 
 
 def confirm():
