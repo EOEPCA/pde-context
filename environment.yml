@@ -1,0 +1,15 @@
+name: env_pdecontext
+channels:
+ - conda-forge
+ - terradue 
+ - eoepca
+dependencies:
+ - click
+ - requests
+ - pycrypto
+ - robotframework
+ - pip
+ - pip:
+  - eoepca_scim
+  - pyjwkest
+  - WellKnownHandler

@@ -1,11 +1,13 @@
 import click
-import utils.DemoClient as client
+from  .utils import DemoClient as client
 import json
 import os
 import requests
 from requests.auth import HTTPBasicAuth
 from pathlib import Path
 import urllib3
+from .aws import set_aws_cli
+#import configparser
 
 @click.command()
 @click.option('--username',required=True, help='username')
@@ -67,7 +69,7 @@ host_bucket = {endpoint}
 access_key = {s3_access}
 secret_key = {s3_secret}
     """.format(endpoint=endpoint, s3_access=s3_access, s3_secret=s3_secret)
-    click.echo(s3cfgString)
+    
 
     confirm_s3cfg = True
     # checking if file already exists
@@ -89,63 +91,7 @@ secret_key = {s3_secret}
     # -------------------------------------------------------------------------------
     # AWS CONFIG FILE
     # -------------------------------------------------------------------------------
-    printTitle("AWS CLI: creating/updating config file:")
-    aws_config_file = os.path.join(home, '.aws/config')
-    aws_credential_file = os.path.join(home, '.aws/credentials')
-
-    ## Config file
-    aws_config_file_string = """[profile {workspace_prefix}-{username}]
-aws_access_key_id = {s3_access}
-aws_secret_access_key = {s3_secret}
-region = {s3_region}
-s3 =
-  endpoint_url = {endpoint}
-  addressing_style = path
-""".format(workspace_prefix= workspace_prefix, username=username, endpoint=endpoint, s3_access=s3_access, s3_secret=s3_secret, s3_region=s3_region)
-
-    ## Credential file. This file will be used by Jenkins to grant access to the Workspace
-    aws_credentials_file_string = """[{workspace_prefix}-{username}]
-aws_access_key_id = {s3_access}
-aws_secret_access_key = {s3_secret}
-region = {s3_region}
-s3 =
-  endpoint_url = {endpoint}
-  addressing_style = path
-""".format(workspace_prefix= workspace_prefix, username=username, endpoint=endpoint, s3_access=s3_access, s3_secret=s3_secret, s3_region=s3_region)
-
-    click.echo(aws_config_file_string)
-    
-    ################
-    # Write/append config file
-    if os.path.exists(aws_config_file):
-        append_write = 'a'  # append if already exists
-        click.echo(
-            f".aws/config exists. Appending new config for user {username}")
-        aws_config_file_string = f"\n\n{aws_config_file_string}"
-    else:
-        append_write = 'w'  # make a new file if not
-        click.echo(".aws/config does not exist. File will be created")
-    
-    aws_config = open(aws_config_file, append_write)
-    aws_config.write(aws_config_file_string)
-    aws_config.close()
-
-    ################
-    # Write/append credential file
-    if os.path.exists(aws_credential_file):
-        append_write = 'a'  # append if already exists
-        click.echo(
-            f".aws/credentials exists. Appending new config for user {username}")
-        aws_credentials_file_string = f"\n\n{aws_credentials_file_string}"
-    else:
-        append_write = 'w'  # make a new file if not
-        click.echo(".aws/config does not exist. File will be created")
-
-
-    aws_config = open(aws_credential_file, append_write)
-    aws_config.write(aws_credentials_file_string)
-    aws_config.close()
-
+    set_aws_cli( f"{workspace_prefix}-{username}", s3_access, s3_secret, s3_region, endpoint)
     # -------------------------------------------------------------------------------
     # JENKINS AWS VARIABLES
     # -------------------------------------------------------------------------------

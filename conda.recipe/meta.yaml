@@ -1,0 +1,39 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: pde-context
+  version: {{ data.get('version') }}
+  
+source:
+  path: ..
+
+build:
+  number: 1
+
+requirements:
+  host:
+    - click
+    - requests
+    - pycrypto
+    - robotframework
+    - pip
+    - pip:
+      - eoepca_scim
+      - pyjwkest
+      - WellKnownHandler
+
+  run:
+    - click
+    - requests
+    - pycrypto
+    - robotframework
+    - pip
+    - pip:
+      - eoepca_scim
+      - pyjwkest
+      - WellKnownHandler
+
+about:
+  home: https://eoepca.github.io/
+  license: Apache License 2.0
+  summary: PDE contextualization

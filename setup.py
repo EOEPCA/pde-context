@@ -1,18 +1,16 @@
 from setuptools import setup, find_packages
 
-packagename="pde-context"
+packagename="pdecontext"
 
-with open('requirements.txt') as f:
-    required = f.read().splitlines()
+#with open('requirements.txt') as f:
+#    required = f.read().splitlines()
 
 setup(
-    name=packagename,
-    version='0.1',
-    packages=find_packages(),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     include_package_data=True,
-    install_requires=required,
     entry_points='''
         [console_scripts]
-        {packagename}=pdecontext.main:cli
+        pde-context=pdecontext.main:cli
     '''.format(packagename=packagename),
 )
