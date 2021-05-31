@@ -12,6 +12,7 @@ build:
 
 requirements:
   host:
+    - python
     - click
     - requests
     - pycrypto
@@ -19,6 +20,7 @@ requirements:
     - pip
 
   run:
+    - python
     - click
     - requests
     - pycrypto
