@@ -33,10 +33,11 @@ def set_aws_cli(user_rm_section, s3_access, s3_secret, s3_region, endpoint):
 
         config.remove_section(user_rm_section)
 
-        config[user_rm_section] = {"aws_access_key_id": s3_access,
-                            "aws_secret_access_key": s3_secret,
-                            "region": s3_region,
-                            "s3": f"\nendpoint_url = {endpoint}\naddressing_style = path"}
+
+    config[user_rm_section] = {"aws_access_key_id": s3_access,
+                        "aws_secret_access_key": s3_secret,
+                        "region": s3_region,
+                        "s3": f"\nendpoint_url = {endpoint}\naddressing_style = path"}
 
     with open(aws_config_file, 'w') as configfile:
         config.write(configfile)
