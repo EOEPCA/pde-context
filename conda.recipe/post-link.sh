@@ -1,2 +1,2 @@
 
-$PREFIX/pip install eoepca_scim pyjwkest WellKnownHandler
+$PREFIX/bin/pip install eoepca_scim pyjwkest WellKnownHandler
