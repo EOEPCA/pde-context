@@ -17,10 +17,6 @@ requirements:
     - pycrypto
     - robotframework
     - pip
-    - pip:
-      - eoepca_scim
-      - pyjwkest
-      - WellKnownHandler
 
   run:
     - click
@@ -28,10 +24,7 @@ requirements:
     - pycrypto
     - robotframework
     - pip
-    - pip:
-      - eoepca_scim
-      - pyjwkest
-      - WellKnownHandler
+    
 
 about:
   home: https://eoepca.github.io/
