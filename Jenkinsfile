@@ -30,7 +30,7 @@ pipeline {
             steps { 
                 withCredentials([string(credentialsId: 'terradue-conda', variable: 'ANACONDA_API_TOKEN')]) {
                 sh '''#!/usr/bin/env bash
-                export PACKAGENAME=stars-copy
+                export PACKAGENAME=pde-context
                 label=main
                 if [ "$GIT_BRANCH" = "develop" ]; then label=dev; fi
                 anaconda upload --no-progress --force --user Terradue --label $label /srv/conda/envs/env_conda/conda-bld/*/$PACKAGENAME-*.tar.bz2
