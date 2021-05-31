@@ -1,58 +1,74 @@
-
 import os
 import configparser
 from pathlib import Path
+
 
 def set_aws_cli(user_rm_section, s3_access, s3_secret, s3_region, endpoint):
 
     home = str(Path.home())
 
-    if not os.path.exists(os.path.join(home, '.aws')):
-        os.makedirs(os.path.join(home, '.aws'))
+    if not os.path.exists(os.path.join(home, ".aws")):
+        os.makedirs(os.path.join(home, ".aws"))
 
-    aws_config_file = os.path.join(home, '.aws/config')
-    aws_credential_file = os.path.join(home, '.aws/credentials')
-    
+    aws_config_file = os.path.join(home, ".aws/config")
+    aws_credential_file = os.path.join(home, ".aws/credentials")
+
     config = configparser.ConfigParser()
 
     if os.path.exists(aws_config_file):
-        
+
         config.read(aws_config_file)
 
     # set the plugins section
-    if 'plugins' in config.sections():
-    
-        if not 'endpoint' in config['plugins'].keys():
+    if "plugins" in config.sections():
 
-            config['plugins']['endpoint'] = 'awscli_plugin_endpoint'
-    else: 
-        
-        config['plugins'] = {'endpoint': 'awscli_plugin_endpoint'}
+        if not "endpoint" in config["plugins"].keys():
+
+            config["plugins"]["endpoint"] = "awscli_plugin_endpoint"
+    else:
+
+        config["plugins"] = {"endpoint": "awscli_plugin_endpoint"}
 
     if user_rm_section in config.sections():
 
         config.remove_section(user_rm_section)
 
+    if 'default' in config.sections():
 
-    config[user_rm_section] = {"aws_access_key_id": s3_access,
-                        "aws_secret_access_key": s3_secret,
-                        "region": s3_region,
-                        "s3": f"\nendpoint_url = {endpoint}\naddressing_style = path"}
+        config.remove_section('default')
 
-    with open(aws_config_file, 'w') as configfile:
+    for key in ['default', f"profile {user_rm_section}"]:
+
+        config[key] = {
+            "aws_access_key_id": s3_access,
+            "aws_secret_access_key": s3_secret,
+            "region": s3_region,
+            "s3": f"\nendpoint_url = {endpoint}\naddressing_style = path",
+        }
+
+    # local 
+    config["profile local"] = {
+            "aws_access_key_id": "minioadmin",
+            "aws_secret_access_key": "minioadmin",
+            "region": "us-west-1",
+            "s3": f"\nendpoint_url = http://localhost:9000\naddressing_style = path\nsignature_version = s3v4",
+        }
+
+    with open(aws_config_file, "w") as configfile:
         config.write(configfile)
-
 
     config = configparser.ConfigParser()
 
     if os.path.exists(aws_credential_file):
-        
+
         os.remove(aws_credential_file)
 
-    config[user_rm_section] = {"aws_access_key_id": s3_access,
-                            "aws_secret_access_key": s3_secret,
-                            "region": s3_region,
-                            "s3": f"\nendpoint_url = {endpoint}\naddressing_style = path"}
-    
-    with open(aws_credential_file, 'w') as configfile:
+    config[user_rm_section] = {
+        "aws_access_key_id": s3_access,
+        "aws_secret_access_key": s3_secret,
+        "region": s3_region,
+        "s3": f"\nendpoint_url = {endpoint}\naddressing_style = path",
+    }
+
+    with open(aws_credential_file, "w") as configfile:
         config.write(configfile)
