@@ -1,14 +1,14 @@
 # pde-context
 
-*pde-context* is a command line tool that provides to a user working in a pde envrironment the means to access his workspace resources.
+*pde-context* is a command line tool that connects the PDE to the Workspace by configuring the PDE tools like s3cmd, aws cli and Jenkins.
 
 
 ## Usage
 
 
 * To call the help function type the following command:
-  ```
 
+  ```console
   pde-context --help
 
   ```
@@ -26,42 +26,44 @@
 
   ```
 
-* To run the pde-context script run the following command using your username, password and the resource manager endpoint url
-  ```
-  pde-context --username eric --password defaultPWD --base_domain 111.222.333.444.nip.io
-  ```
-  the ouptput should look like the following one:
-  ```
-  ################################################
-  ### Retrieving access credentials for user eric 
-  ...
+* To run the `pde-context` tool run the following command using your username, password and the Resource Manager endpoint url
+
+```console  
+pde-context --username eric --password defaultPWD --base_domain 111.222.333.444.nip.io
+```
+
+the ouptput should look like the following one:
+
+```
+################################################
+### Retrieving access credentials for user eric 
+...
  
-  [Workspace Details] = 200 (OK)
+[Workspace Details] = 200 (OK)
 
-  ################################################
-  ### Access credential json 
+################################################
+### Access credential json 
 
-  ...
+...
 
-  ################################################
-  ### s3cmd creating/updating config file: 
+################################################
+### s3cmd creating/updating config file: 
 
-  ...
+...
   
-  /home/jovyan/.s3cfg does not exist. File will be created
+/home/jovyan/.s3cfg does not exist. File will be created
 
-  ################################################
-  ### AWS CLI: creating/updating config file: 
+################################################
+### AWS CLI: creating/updating config file: 
 
-  ...
+ ...
+ ################################################
+ ### JENKINS: creating secrets for workspace access 
 
-  ################################################
-  ### JENKINS: creating secrets for workspace access 
-
-  S3_Region added to Jenkins Secrets
-  S3_Endpoint added to Jenkins Secrets
-  S3_Bucket added to Jenkins Secrets
-  S3_ProjectId added to Jenkins Secrets
-  ```
+S3_Region added to Jenkins Secrets
+S3_Endpoint added to Jenkins Secrets
+S3_Bucket added to Jenkins Secrets
+S3_ProjectId added to Jenkins Secrets
+```
   
- * **s3cmd**, **aws cli s3** and **Jenkins** should now be configured to access the workspace S3 repository.
+* **s3cmd**, **aws cli s3** and **Jenkins** are now be configured to access the user's Workspace Object Storage.
